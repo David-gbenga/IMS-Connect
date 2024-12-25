@@ -1,0 +1,47 @@
+.voting-page-container {
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.voting-page-container h2 {
+  text-align: center;
+  color: #34495e;
+  margin-bottom: 20px;
+}
+
+.voting-page-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.voting-page-container li {
+  background: white;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.voting-page-container li p {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.voting-page-container button {
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.voting-page-container button:hover {
+  background-color: #229954;
+}

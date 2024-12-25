@@ -1,0 +1,75 @@
+/* RegisterPage.css */
+
+/* Container: allow scrolling and natural expansion */
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally but not vertically */
+  min-height: 100vh; /* Let the container expand if form is tall */
+  background-color: #e8f5e9; /* Pale green background */
+  font-family: Arial, sans-serif;
+  padding: 20px; /* Some space around the container */
+  box-sizing: border-box;
+  overflow-y: auto; /* Enable vertical scrolling if needed */
+}
+
+/* Form wrapper: stays the same, just remove the absolute centering approach */
+.register-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 350px; /* Wider form for comfortable input fields */
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px; /* Add space from the top of the container */
+}
+
+/* Heading style */
+.register-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #388e3c; /* Green heading for sustainability theme */
+  font-size: 1.5rem;
+}
+
+/* Common spacing for each form group */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #2e7d32; /* Slightly darker green for label text */
+}
+
+/* Inputs and selects */
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* The submit button with a green theme */
+.register-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #388e3c; /* Sustainability green */
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+/* Hover effect for the button */
+.register-button:hover {
+  background-color: #2e7d32;
+}

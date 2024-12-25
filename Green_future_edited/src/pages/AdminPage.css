@@ -1,0 +1,159 @@
+/* AdminPage.css */
+
+/* Container for the entire admin panel */
+.admin-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+/* Top-level heading */
+.admin-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* Form section styling */
+.admin-form-section {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.admin-form-section h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.admin-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.admin-form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.admin-form-group input,
+.admin-form-group select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkbox-group label {
+  font-weight: normal;
+  margin: 0;
+  color: #333;
+}
+
+.admin-submit-button {
+  background-color: #28a745;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-submit-button:hover {
+  background-color: #218838;
+}
+
+/* Table section styling */
+.admin-table-section {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.admin-table-section h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Admin Table */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.not-approved {
+  color: red;
+  font-weight: bold;
+}
+
+/* Buttons in the Actions column */
+.admin-action-button {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  margin-right: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.admin-action-button:hover {
+  background-color: #0056b3;
+}
+
+.admin-action-button.edit {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.admin-action-button.edit:hover {
+  background-color: #e0a800;
+}
+
+.admin-action-button.delete {
+  background-color: #dc3545;
+}
+
+.admin-action-button.delete:hover {
+  background-color: #c82333;
+}
+
+.admin-action-button.approve {
+  background-color: #28a745;
+}
+
+.admin-action-button.approve:hover {
+  background-color: #218838;
+}

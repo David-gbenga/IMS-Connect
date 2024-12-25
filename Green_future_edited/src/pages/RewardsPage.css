@@ -1,0 +1,40 @@
+.rewards-page-container {
+  text-align: center;
+  padding: 50px;
+  background-color: #f4f9f4;
+}
+
+.rewards-page-container h2 {
+  color: #27ae60;
+  margin-bottom: 20px;
+}
+
+.rewards-page-container p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #2c3e50;
+}
+
+.rewards-page-container button {
+  padding: 10px 20px;
+  background-color: #27ae60;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.rewards-page-container button:hover {
+  background-color: #229954;
+}
+
+.rewards-page-container ul {
+  list-style-type: disc;
+  margin-top: 20px;
+  text-align: left;
+  display: inline-block;
+  color: #34495e;
+}

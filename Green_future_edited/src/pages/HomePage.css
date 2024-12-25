@@ -1,0 +1,40 @@
+.homepage-container {
+  text-align: center;
+  padding: 50px;
+  background-color: #f4f9f4;
+  color: #2c3e50;
+}
+
+.homepage-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #27ae60;
+}
+
+.homepage-container p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.features {
+  margin-top: 40px;
+}
+
+.features h2 {
+  color: #27ae60;
+  margin-bottom: 15px;
+}
+
+.features ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  text-align: left;
+}
+
+.cta p {
+  margin-top: 40px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #2980b9;
+}
