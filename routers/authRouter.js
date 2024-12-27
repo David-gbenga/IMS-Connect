@@ -10,7 +10,7 @@ const router = Router();
 // CREATE a new user
 router.post("/register", validateRegisterInput, register);
 
-// CREATE a new user
+// Login as a user
 router.post("/login", validateLoginInput, login);
 
 export default router;

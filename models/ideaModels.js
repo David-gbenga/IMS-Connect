@@ -20,6 +20,10 @@ const IdeaSchema = new mongoose.Schema(
       type: String,
       default: "English", // Provide a sensible default if desired
     },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt fields

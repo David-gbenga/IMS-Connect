@@ -9,45 +9,32 @@ const AdminPage = () => {
     role: "Employee", // or 'Admin', 'Innovation Manager'
     email: "",
     department: "",
-    approved: false, // Whether the user can submit ideas
+    approved: false, // NOTE: This field isn't in your current schema. See note below.
   });
 
   const [editMode, setEditMode] = useState(false);
   const [editUserId, setEditUserId] = useState(null);
 
-  // 1. Fetch all users on component mount
+  // 1. Fetch all staff on component mount
   useEffect(() => {
-    // Fetch your user list from the backend
-    // Example:
-    // fetch("/api/v1/users")
-    //   .then((res) => res.json())
-    //   .then((data) => setUsers(data))
-    //   .catch((error) => console.error("Error fetching users:", error));
+    const fetchStaff = async () => {
+      try {
+        const response = await fetch("/api/v1/staff");
+        if (!response.ok) {
+          throw new Error("Failed to fetch staff list");
+        }
+        const data = await response.json();
+        // According to your controller, the response shape is { all_staff: [...] }
+        setUsers(data.all_staff || []);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
 
-    // For now, we’ll simulate with some placeholder data:
-    setUsers([
-      {
-        _id: "1",
-        employee_id: 100,
-        full_name: "John Doe",
-        role: "Employee",
-        email: "john@example.com",
-        department: "Engineering",
-        approved: true,
-      },
-      {
-        _id: "2",
-        employee_id: 101,
-        full_name: "Jane Smith",
-        role: "Admin",
-        email: "jane@example.com",
-        department: "HR",
-        approved: false,
-      },
-    ]);
+    fetchStaff();
   }, []);
 
-  // 2. Handle input changes for both creating and editing users
+  // 2. Handle input changes (create or edit)
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -59,96 +46,136 @@ const AdminPage = () => {
   // 3. Create a new user
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    // Example POST request
-    // const response = await fetch("/api/v1/users", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
-    // const data = await response.json();
+    try {
+      const response = await fetch("/api/v1/staff", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    // For now, we just simulate adding to local state
-    const newUser = {
-      _id: Date.now().toString(),
-      ...formData,
-    };
-    setUsers([...users, newUser]);
+      if (!response.ok) {
+        throw new Error("Error creating staff");
+      }
+      const { StaffData } = await response.json();
 
-    // Reset form
-    setFormData({
-      employee_id: "",
-      full_name: "",
-      role: "Employee",
-      email: "",
-      department: "",
-      approved: false,
-    });
+      // Add the newly created staff to state
+      setUsers((prev) => [...prev, StaffData]);
+
+      // Reset form
+      setFormData({
+        employee_id: "",
+        full_name: "",
+        role: "Employee",
+        email: "",
+        department: "",
+        approved: false,
+      });
+    } catch (error) {
+      console.error("Error creating user:", error);
+      alert("Failed to create user. Please check the console for more info.");
+    }
   };
 
   // 4. Select a user to edit
   const handleEditClick = (user) => {
     setEditMode(true);
     setEditUserId(user._id);
+    // Pre-fill the form with the user's existing data
     setFormData({
-      employee_id: user.employee_id,
-      full_name: user.full_name,
-      role: user.role,
-      email: user.email,
-      department: user.department,
-      approved: user.approved,
+      employee_id: user.employee_id || "",
+      full_name: user.full_name || "",
+      role: user.role || "Employee",
+      email: user.email || "",
+      department: user.department || "",
+      approved: user.approved || false, // Not in your schema by default
     });
   };
 
   // 5. Update user details
   const handleUpdateUser = async (e) => {
     e.preventDefault();
-    // Example PATCH request:
-    // await fetch(`/api/v1/users/${editUserId}`, {
-    //   method: "PATCH",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // });
+    try {
+      const response = await fetch(`/api/v1/staff/${editUserId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
-    // Simulate local state update
-    setUsers((prev) =>
-      prev.map((user) =>
-        user._id === editUserId ? { ...user, ...formData } : user
-      )
-    );
-    setEditMode(false);
-    setEditUserId(null);
+      if (!response.ok) {
+        throw new Error("Error updating staff");
+      }
+      const { staff2 } = await response.json(); // your controller responds with { msg, staff2 }
 
-    // Reset form
-    setFormData({
-      employee_id: "",
-      full_name: "",
-      role: "Employee",
-      email: "",
-      department: "",
-      approved: false,
-    });
+      // Update local state
+      setUsers((prev) =>
+        prev.map((user) => (user._id === editUserId ? staff2 : user))
+      );
+
+      // Reset
+      setEditMode(false);
+      setEditUserId(null);
+      setFormData({
+        employee_id: "",
+        full_name: "",
+        role: "Employee",
+        email: "",
+        department: "",
+        approved: false,
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      alert("Failed to update user. Check console for more info.");
+    }
   };
 
   // 6. Delete a user
   const handleDeleteUser = async (userId) => {
-    // Example DELETE request:
-    // await fetch(`/api/v1/users/${userId}`, { method: "DELETE" });
+    try {
+      const response = await fetch(`/api/v1/staff/${userId}`, {
+        method: "DELETE",
+      });
 
-    // Simulate local state removal
-    setUsers((prev) => prev.filter((user) => user._id !== userId));
+      if (!response.ok) {
+        throw new Error("Error deleting staff");
+      }
+      // The controller returns { msg: "staff deleted", task: staff3 } on success
+      setUsers((prev) => prev.filter((user) => user._id !== userId));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      alert("Failed to delete user. Check console for more info.");
+    }
   };
 
   // 7. Toggle "approved" for employees to submit ideas
+  // Not in your schema. If you want to store it in DB, add a field or handle partial update
   const handleApproveClick = async (userId) => {
-    // Example PATCH:
-    // await fetch(`/api/v1/users/${userId}/approve`, { method: "PATCH" });
-    // Or handle it manually with body
+    try {
+      // Find the user
+      const userToToggle = users.find((u) => u._id === userId);
+      if (!userToToggle) return;
 
-    setUsers((prev) =>
-      prev.map((user) =>
-        user._id === userId ? { ...user, approved: !user.approved } : user
-      )
-    );
+      // Toggle in local state first (optimistic update)
+      const newApprovedStatus = !userToToggle.approved;
+
+      // If you want to store this in DB, do a partial update:
+      // For example: PATCH /api/v1/staff/:id with { approved: newApprovedStatus }
+      // BUT you need 'approved' in your schema for this to work persistently.
+      await fetch(`/api/v1/staff/${userId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ approved: newApprovedStatus }),
+      });
+
+      // Update local state
+      setUsers((prev) =>
+        prev.map((user) =>
+          user._id === userId ? { ...user, approved: newApprovedStatus } : user
+        )
+      );
+    } catch (error) {
+      console.error("Error toggling approve status:", error);
+      alert("Failed to toggle approval status. Check console for more info.");
+    }
   };
 
   return (

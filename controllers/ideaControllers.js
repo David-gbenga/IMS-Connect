@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 //Get an Idea
 export const getIdea = async (req, res) => {
   try {
-    const one_idea = await idea.find({});
+    const one_idea = await idea.find({ createdBy: req.user.userId });
     res.status(StatusCodes.OK).json({ one_idea });
   } catch (error) {
     console.log(error);
@@ -17,6 +17,7 @@ export const getIdea = async (req, res) => {
 
 //Create Staff
 export const createtIdea = async (req, res) => {
+  req.body.createdBy = req.user.userId;
   try {
     const ideaData = await idea.create(req.body);
     await ideaData.save(); // Save to MongoDB
@@ -43,6 +44,7 @@ export const getIdea = async (req, res) => {
 //UPDATE idea
 
 export const updateIdea = async (req, res) => {
+  console.log(req.user);
   const { id } = req.params;
   const upidea = await idea.findByIdAndUpdate(id, req.body, {
     new: true,

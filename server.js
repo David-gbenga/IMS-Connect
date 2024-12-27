@@ -1,7 +1,11 @@
 import "express-async-errors"; // to display error and prevent your application from crashing simultaneusly
 import * as dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 dotenv.config();
+import { authenticateUser } from "./middleware/authMiddleware.js";
+import { ensureAdminFromDB } from "./middleware/privacyAccessMan.js";
 import express from "express";
+
 const app = express();
 //import morgan
 import morgan from "morgan";
@@ -24,6 +28,8 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json()); //middleware to create server
 
+app.use(cookieParser());
+
 app.get("/", (req, res) => {
   //test the get request
   res.send("Hello World");
@@ -40,10 +46,10 @@ app.post(
 );
 
 //allow express to use the staff router
-app.use("/api/v1/staff", staffRouter);
+app.use("/api/v1/user", authenticateUser, ensureAdminFromDB, staffRouter);
 
 //allow express to use the idea router
-app.use("/api/v1/idea", idearouter);
+app.use("/api/v1/idea", authenticateUser, idearouter);
 
 //allow express to use the user router
 app.use("/api/v1/user", authRouter);

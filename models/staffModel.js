@@ -15,6 +15,10 @@ const StaffSchema = new mongoose.Schema(
       enum: ["Europe", "North America", "Asia", "South Africa", "Africa"],
       default: "Europe",
     },
+    password: {
+      type: String,
+      required: true,
+    },
     language: { type: String, default: "English" }, // Add a default language if needed
     country: { type: String, required: true }, // Add `required` if necessary
     department: { type: String, required: true }, // Add `required` if necessary

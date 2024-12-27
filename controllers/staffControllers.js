@@ -1,10 +1,12 @@
-import Staff_table from "../models/staffModel.js";
+//import Staff_table from "../models/staffModel.js";
 import { StatusCodes } from "http-status-codes";
+import User from "../models/authModel.js";
+import bcrypt from "bcryptjs";
 
 //Get All Staff
 export const getAllStaff = async (req, res) => {
   try {
-    const all_staff = await Staff_table.find({});
+    const all_staff = await User.find({});
     res.status(StatusCodes.OK).json({ all_staff });
   } catch (error) {
     console.log(error);
@@ -17,21 +19,42 @@ export const getAllStaff = async (req, res) => {
 //Create Staff
 export const createStaff = async (req, res) => {
   try {
-    const StaffData = await Staff_table.create(req.body);
-    await StaffData.save(); // Save to MongoDB
-    res.status(StatusCodes.CREATED).json({ StaffData });
+    const {
+      employee_id,
+      full_name,
+      password,
+      role,
+      email,
+      region,
+      language,
+      country,
+      department,
+    } = req.body;
+    // a random value that is added to the password before hashing
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    req.body.password = hashedPassword;
+
+    // You might want to validate data here or hash password, etc.
+    const newUser = await User.create(req.body);
+
+    res.status(201).json({
+      message: "User created successfully",
+      data: newUser,
+    });
   } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ error: "Error creating staff", details: error.message });
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      error: "Failed to create user",
+      details: error.message,
+    });
   }
 };
 
 //Get Single staff
 export const getStaff = async (req, res) => {
   const { id } = req.params;
-  const staff1 = await Staff_table.findById(id);
+  const staff1 = await User.findById(id);
   console.log(staff1);
   if (!staff1) {
     return res.status(404).json({ msg: `no staff with id ${id}` });
@@ -43,7 +66,7 @@ export const getStaff = async (req, res) => {
 
 export const updateStaff = async (req, res) => {
   const { id } = req.params;
-  const staff2 = await Staff_table.findByIdAndUpdate(id, req.body, {
+  const staff2 = await User.findByIdAndUpdate(id, req.body, {
     new: true,
   });
   if (!staff2) {
@@ -56,7 +79,7 @@ export const updateStaff = async (req, res) => {
 export const deleteStaff = async (req, res) => {
   //define and find
   const { id } = req.params;
-  const staff3 = await Staff_table.findByIdAndDelete(id);
+  const staff3 = await User.findByIdAndDelete(id);
   if (!staff3) {
     return res.status(404).json({ msg: `no staff with id ${id}` });
   }
