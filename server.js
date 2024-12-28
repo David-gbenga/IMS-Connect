@@ -46,15 +46,15 @@ app.post(
 );
 
 //allow express to use the staff router
-app.use("/api/v1/user", authenticateUser, ensureAdminFromDB, staffRouter);
+app.use("/api/v1/admin", authenticateUser, ensureAdminFromDB, staffRouter); //authenticateUser,ensureAdminFromDB,
 
 //allow express to use the idea router
-app.use("/api/v1/idea", authenticateUser, idearouter);
+app.use("/api/v1/idea", idearouter);
 
 //allow express to use the user router
-app.use("/api/v1/user", authRouter);
+app.use("/api/v1/user", authRouter); //
 
-//NOT FOUND MIDDLEWARE, the star applies to all the request, i.e all the urls
+//NOT FOUND MIDDLEWARE, thlogoutRoutere star applies to all the request, i.e all the urls
 app.use(" * ", (req, res) => {
   res.status(404).json({ msg: "Not Found" });
 });

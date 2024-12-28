@@ -31,7 +31,9 @@ export const login = async (req, res) => {
       });
     }
     const token = createJWT({ userId: user._id, role: user.role });
-    const oneDay = 1000 * 60 * 60 * 24;
+    //res.send({ token });
+
+    const oneDay = 1000 * 60 * 2;
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -134,3 +136,18 @@ export const createStaff = async (req, res) => {
     });
   }
 };
+
+export const logout = (req, res) => {
+  // Clear the authentication token cookie
+  res.clearCookie("token", { httpOnly: true });
+  return res.status(200).json({ message: "Logged out successfully" });
+};
+
+/*
+export const logout = (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: "user logged out!" });
+}; */

@@ -1,6 +1,8 @@
 import { Router } from "express";
 const router = Router();
 
+import { logout } from "../controllers/authController.js";
+
 import {
   getAllStaff,
   createStaff,
@@ -10,8 +12,13 @@ import {
 } from "../controllers/staffControllers.js";
 
 //ROUTER CALL & FUNCTIONS
+
 router.get("/", getAllStaff);
 router.post("/", createStaff);
+
+// Logout as a user
+router.get("/logout", logout);
+
 router.get("/:id", getStaff);
 router.patch("/:id", updateStaff);
 router.delete("/:id", deleteStaff);
