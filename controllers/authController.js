@@ -33,11 +33,11 @@ export const login = async (req, res) => {
     const token = createJWT({ userId: user._id, role: user.role });
     //res.send({ token });
 
-    const oneDay = 1000 * 60 * 2;
+    const twenty_minutes = 1000 * 60 * 20;
 
     res.cookie("token", token, {
       httpOnly: true,
-      expires: new Date(Date.now() + oneDay),
+      expires: new Date(Date.now() + twenty_minutes),
       secure: process.env.NODE_ENV === "production",
     });
 

@@ -1,26 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 const LoginPage = () => {
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("employee"); // If needed, pass or store role
+  //const [role, setRole] = useState("Employee");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  // Check if the user is already logged in
+  useEffect(() => {
+    const loggedInUser = JSON.parse(localStorage.getItem("user"));
+    if (loggedInUser?.role === "Employee") {
+      navigate("/home", { replace: true });
+    } else if (loggedInUser?.role === "Admin") {
+      navigate("/admin", { replace: true });
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
-      // Prepare the payload
       const payload = {
         employee_id: employeeId,
         password,
-        // You can also include role if the backend is checking it
-        // role,
       };
 
-      // Make a POST request to your login endpoint
       const response = await fetch("/api/v1/user/login", {
         method: "POST",
         headers: {
@@ -31,30 +39,30 @@ const LoginPage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData?.error || "Login failed.");
+        setError(errorData?.error || "Login failed.");
+        return;
       }
 
       const data = await response.json();
-      console.log("Login successful:", data);
+      const userRole = data?.user?.role;
 
-      // Optionally, store user info, token, or role in local storage or state
-      // localStorage.setItem("user", JSON.stringify(data.user));
+      // Save user data to localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      alert("Login successful!");
-      // Redirect user to a protected page, or home page, etc.
-      navigate("/home"); // Example: go to "/home" after login
-
-      // Reset the form
-      setEmployeeId("");
-      setPassword("");
-      setRole("employee");
-    } catch (error) {
-      console.error("Error logging in:", error);
-      alert(`Error: ${error.message}`);
+      // Redirect based on role
+      if (userRole === "Employee") {
+        navigate("/home", { replace: true });
+      } else if (userRole === "Admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        setError("Invalid role. Unable to redirect.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
-  // Navigate to register page if user clicks "Register"
   const goToRegister = () => {
     navigate("/register");
   };
@@ -62,6 +70,7 @@ const LoginPage = () => {
   return (
     <div className="login-container">
       <h2>Welcome to IMS-Connect</h2>
+      {error && <div className="error-message">{error}</div>}
       <form onSubmit={handleSubmit} className="login-form">
         <div className="form-group">
           <label htmlFor="employeeId">Employee ID:</label>
@@ -82,31 +91,6 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
-        <div className="form-group">
-          <label>Role:</label>
-          <div className="role-selection">
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="employee"
-                checked={role === "employee"}
-                onChange={() => setRole("employee")}
-              />
-              Employee
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="role"
-                value="admin"
-                checked={role === "admin"}
-                onChange={() => setRole("admin")}
-              />
-              Admin
-            </label>
-          </div>
         </div>
 
         <button type="submit" className="login-button">

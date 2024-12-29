@@ -49,10 +49,10 @@ app.post(
 app.use("/api/v1/admin", authenticateUser, ensureAdminFromDB, staffRouter); //authenticateUser,ensureAdminFromDB,
 
 //allow express to use the idea router
-app.use("/api/v1/idea", idearouter);
+app.use("/api/v1/idea", authenticateUser, idearouter); //authenticateUser,
 
 //allow express to use the user router
-app.use("/api/v1/user", authRouter); //
+app.use("/api/v1/user", authenticateUser, authRouter); //authenticateUser,
 
 //NOT FOUND MIDDLEWARE, thlogoutRoutere star applies to all the request, i.e all the urls
 app.use(" * ", (req, res) => {

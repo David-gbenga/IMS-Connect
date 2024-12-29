@@ -5,19 +5,25 @@ import { StatusCodes } from "http-status-codes";
 //Get an Idea
 export const getIdea = async (req, res) => {
   try {
+    if (!req.user || !req.user.userId) {
+      return res
+        .status(401)
+        .json({ error: "Unauthorized access. No user ID found." });
+    }
+
     const one_idea = await idea.find({ createdBy: req.user.userId });
     res.status(StatusCodes.OK).json({ one_idea });
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching idea:", error);
     res
       .status(500)
       .json({ error: "Error finding idea", details: error.message });
   }
 };
 
-//Create Staff
+//Create idea
 export const createtIdea = async (req, res) => {
-  req.body.createdBy = req.user.userId;
+  req.body.createdBy = req.user._id;
   try {
     const ideaData = await idea.create(req.body);
     await ideaData.save(); // Save to MongoDB

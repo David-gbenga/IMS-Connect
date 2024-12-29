@@ -2,67 +2,69 @@ import React, { useState } from "react";
 import "./IdeaSubmissionPage.css";
 
 const IdeaSubmissionPage = () => {
-  const [idea, setIdea] = useState("");
-  const [ideaCategory, setIdeaCategory] = useState("Renewable Energy");
-  const [language, setLanguage] = useState("English");
+  const [formData, setFormData] = useState({
+    idea: "",
+    ideaCategory: "",
+    language: "",
+  });
+  const [message, setMessage] = useState(""); // For success or error messages
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Prepare the payload to match your Idea schema
-    const payload = {
-      idea,
-      ideaCategory,
-      language,
-    };
+    setMessage(""); // Reset message
 
     try {
-      // POST request to your idea endpoint
-      const response = await fetch("/api/v1/ideas", {
+      const response = await fetch("/api/v1/idea", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData?.error || "An error occurred while submitting the idea."
-        );
+        throw new Error(errorData?.error || "Error creating idea.");
       }
 
-      const data = await response.json();
-      console.log("Idea submitted:", data);
-      alert("Idea submitted successfully!");
-
-      // Reset form fields
-      setIdea("");
-      setIdeaCategory("Renewable Energy");
-      setLanguage("English");
+      const { ideaData } = await response.json();
+      console.log("Idea created:", ideaData);
+      setMessage("Idea submitted successfully!");
+      setFormData({
+        idea: "",
+        ideaCategory: "Renewable Energy",
+        language: "English",
+      });
     } catch (error) {
-      console.error("Error submitting idea:", error);
-      alert(`Error: ${error.message}`);
+      console.error("Error creating idea:", error);
+      setMessage(`Error: ${error.message}`);
     }
   };
 
   return (
     <div className="idea-submission-container">
       <h2>Submit Your Idea</h2>
+      {message && <div className="message">{message}</div>}
       <form onSubmit={handleSubmit} className="idea-form">
-        {/* Idea Text */}
         <textarea
+          name="idea"
           placeholder="Describe your idea..."
-          value={idea}
-          onChange={(e) => setIdea(e.target.value)}
+          value={formData.idea}
+          onChange={handleChange}
           required
         />
-
-        {/* Idea Category */}
         <select
-          value={ideaCategory}
-          onChange={(e) => setIdeaCategory(e.target.value)}
+          name="ideaCategory"
+          value={formData.ideaCategory}
+          onChange={handleChange}
         >
           <option value="Renewable Energy">Renewable Energy</option>
           <option value="Eco-Friendly Urban Development">
@@ -70,15 +72,16 @@ const IdeaSubmissionPage = () => {
           </option>
           <option value="Environmental Policies">Environmental Policies</option>
         </select>
-
-        {/* Language */}
-        <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <select
+          name="language"
+          value={formData.language}
+          onChange={handleChange}
+        >
           <option value="English">English</option>
           <option value="Spanish">Spanish</option>
           <option value="French">French</option>
           <option value="Chinese">Chinese</option>
         </select>
-
         <button type="submit">Submit Idea</button>
       </form>
     </div>

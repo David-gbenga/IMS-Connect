@@ -1,4 +1,6 @@
 import { Router } from "express";
+
+import { authenticateUser } from "../middleware/authMiddleware.js";
 const router = Router();
 
 import {
@@ -7,6 +9,9 @@ import {
   updateIdea,
   deleteIdea,
 } from "../controllers/ideaControllers.js";
+
+// Apply `authenticateUser` to all routes in the idea router
+router.use(authenticateUser);
 
 //ROUTER CALL & FUNCTIONS
 router.get("/", getIdea);

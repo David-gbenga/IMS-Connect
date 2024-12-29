@@ -14,11 +14,33 @@ const NavbarComponent = () => {
   };
 
   // Optional: If you have logout logic (e.g., clearing tokens), put it here
-  const handleLogout = (e) => {
+  const handleLogout = async (e) => {
     e.preventDefault(); // Prevent default link navigation
-    // Example: localStorage.removeItem("token");
-    // Example: setIsAuthenticated(false);
-    navigate("/"); // Redirect to login page
+
+    try {
+      // Make a request to the backend to clear the authentication token
+      const response = await fetch("/api/v1/user/logout", {
+        method: "GET",
+        credentials: "include", // Ensure cookies are sent with the request
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Logout failed:", errorData.message);
+        alert("Failed to log out. Please try again.");
+        return;
+      }
+
+      // Clear user data on the frontend
+      localStorage.removeItem("user"); // Optional: Clear saved user data
+      alert("Logged out successfully!");
+
+      // Redirect to login page
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
   return (
@@ -77,7 +99,7 @@ const NavbarComponent = () => {
           {/* Logout Button */}
           <div className="auth-buttons">
             <Link
-              to="#"
+              to="/"
               className="btn btn-success me-2"
               onClick={handleLogout}
             >
