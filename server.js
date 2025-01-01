@@ -31,15 +31,16 @@ app.use("/api/v1/idea", idearouter);
 app.use("/api/v1/user", authRouter);
 
 // Static Files for React App
-app.use(express.static(path.join(__dirname, "Green_future_edited", "build")));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "Green_future_edited", "build")));
 
-// Catch-all Route for React App
-app.get("*", (req, res) => {
-  res.sendFile(
-    path.join(__dirname, "Green_future_edited", "build", "index.html")
-  );
-});
-
+  // Catch-all Route for React App
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.join(__dirname, "Green_future_edited", "build", "index.html")
+    );
+  });
+}
 // Error Handling Middleware
 app.use(" * ", (req, res) => {
   res.status(404).json({ msg: "Not Found" });
