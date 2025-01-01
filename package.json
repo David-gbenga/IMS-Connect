@@ -1,12 +1,14 @@
 {
-  "name": "project_real",
+  "name": "ims-connect",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "nodemon server.js --watch server",
-    "client": "npm start --prefix Green_future_edited"
+    "client": "npm start --prefix Green_future_edited",
+    "build": "npm run build --prefix Green_future_edited",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
